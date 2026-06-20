@@ -1,0 +1,55 @@
+{
+  "cadre_discernement": "theta_tactique",
+  "incertitude_mc": {
+    "moyenne": 0.627973,
+    "n_passages": 30,
+    "std": 0.033254,
+    "std_par_predicat": {
+      "arme": 0.018487,
+      "en_zone_interdite": 0.024733,
+      "mobile": 0.038254,
+      "signature_militaire": 0.051541
+    }
+  },
+  "indicateur_fiabilite": "HAUTE",
+  "limites_declarees": [
+    "L1",
+    "L2",
+    "L4"
+  ],
+  "message_fiabilite": "Décision fiable",
+  "metadata": {
+    "etapes_lukasiewicz": {
+      "etape1_mobile_AND_signature_militaire": 0.5,
+      "etape2_AND_en_zone_interdite": 0.5
+    },
+    "pipeline_version": "0.2.0",
+    "plateforme": "simulation",
+    "run_id": "S-01-canonical-001",
+    "run_timestamp": "2026-05-25T14:30:00Z",
+    "scenario": "S-01"
+  },
+  "modalites_actives": [
+    "radar_RF",
+    "EO_IR"
+  ],
+  "niveau_alerte": "JAUNE",
+  "niveau_operateur": "ALERTER",
+  "nmt_courant": 4,
+  "predicats": {
+    "arme": 0.0,
+    "en_zone_interdite": 1.0,
+    "mobile": 0.8,
+    "signature_militaire": 0.7
+  },
+  "regle_activee": "mobile ∧ signature_militaire ∧ en_zone_interdite",
+  "score_alerte": 0.5,
+  "sha256_hash": "f841dcba1f79b4319be991776c06a50655cf7eb4de54b9f15fe299acfa548785",
+  "theta_actif": [
+    "hostile",
+    "neutre",
+    "inconnu"
+  ],
+  "timestamp": "2026-05-25T14:30:00Z",
+  "version": "1.0"
+}
