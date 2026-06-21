@@ -1,0 +1,79 @@
+version: "1.2"
+description: "Politiques de conformité FCE — Niveau Protégé B et supérieur"
+last_updated: "2026-06-20"
+author: "FCE Policy Authority"
+
+rules:
+  # ── Classification ────────────────────────────────────────────────────────
+
+  - id: "RULE-001"
+    description: "Bloquer la fusion de données SECRET ou supérieur sans autorisation explicite"
+    operator_explanation: >
+      Ce paquet contient des données classifiées SECRET ou supérieur.
+      La fusion est bloquée jusqu'à validation d'une autorisation explicite
+      par l'autorité de sécurité désignée.
+    condition:
+      type: "classification_above"
+      threshold: "PROTECTED_B_ENHANCED"
+    action: "DENY"
+
+  # ── Contrôles de diffusion ────────────────────────────────────────────────
+
+  - id: "RULE-002"
+    description: "Restreindre toute donnée Protégé B sans contrôle de diffusion REL TO CAN"
+    operator_explanation: >
+      Les données classifiées Protégé B doivent porter le contrôle de diffusion
+      'REL TO CAN' avant d'être fusionnées. Ce paquet est restreint en attente
+      de vérification des autorisations de diffusion.
+    condition:
+      type: "missing_caveat"
+      required_caveats:
+        - "REL TO CAN"
+    action: "RESTRICT"
+
+  # ── Domaines réseau ────────────────────────────────────────────────────────
+
+  - id: "RULE-003"
+    description: "Bloquer toute donnée SIGINT ou EO/IR transitant par un réseau non classifié"
+    operator_explanation: >
+      Les capteurs SIGINT et EO/IR ne doivent jamais transiter par UNCLASSIFIED_NET.
+      Ce paquet a été détecté sur un domaine réseau non autorisé pour ce type
+      de capteur. Risque de compromission de sources et méthodes.
+    condition:
+      type: "sensor_domain_restriction"
+      sensors:
+        - "SIGINT"
+        - "EO_IR"
+      domains:
+        - "UNCLASSIFIED_NET"
+    action: "DENY"
+
+  - id: "RULE-004"
+    description: "Mettre en quarantaine les données UAS Protégé B sur réseau non classifié"
+    operator_explanation: >
+      Un paquet UAS de classification Protégé B a été détecté sur le réseau
+      non classifié. Le paquet est mis en quarantaine pour investigation.
+      Vérifier la configuration du capteur UAS concerné.
+    condition:
+      type: "sensor_domain_restriction"
+      sensors:
+        - "UAS"
+      domains:
+        - "UNCLASSIFIED_NET"
+    action: "QUARANTINE"
+
+  # ── Capteurs spécifiques ──────────────────────────────────────────────────
+
+  - id: "RULE-005"
+    description: "Restreindre les données acoustiques sans mention EYES ONLY sur SECRET_NET"
+    operator_explanation: >
+      Les capteurs acoustiques distribués sur le réseau SECRET requièrent
+      la mention EYES ONLY pour protéger les positions des hydrophones.
+      Ce paquet est restreint jusqu'à ajout de la mention requise.
+    condition:
+      type: "sensor_domain_restriction"
+      sensors:
+        - "ACOUSTIC"
+      domains:
+        - "SECRET_NET"
+    action: "RESTRICT"
